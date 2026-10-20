@@ -14,6 +14,13 @@ mkdir -p $logs_folder
 echo "Script started at $(date)" >> $logs_file
 echo "SG Creation Start"
 
+validate_input() {
+    if [$1 -ne 0]; then
+        echo -e "${2}..${R}FAILED.${N}" | tee -a $logs_file
+    else
+        echo -e "${2}..${G}SUCCESS${N}" | tee -a $logs_file
+    fi
+}
 
 for package in $@
 do
@@ -25,13 +32,3 @@ do
     validate_input $? "${group_name}-${package}"
     echo "SG Created Done ${group_name}-${package}"
 done
-
-
-
-validate_input() {
-    if [$1 -ne 0]; then
-        echo -e "${2}..${R}FAILED.${N}" | tee -a $logs_file
-    else
-        echo -e "${2}..${G}SUCCESS${N}" | tee -a $logs_file
-    fi
-}
