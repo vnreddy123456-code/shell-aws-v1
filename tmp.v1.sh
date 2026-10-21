@@ -2,17 +2,17 @@
 # This is for creating new Security groups update with inbound rules in aws
 
 
-mysql-sg=sg-0f7150e0131efa770
-redis-sg=sg-0432aa3e07739b38d
-catalogue-sg=sg-06862356cb315985c
-frontend-sg=sg-06a86884d2a9de796
-dispatch-sg=sg-05f34277487186fad
-cart-sg=sg-0122ed046e399c5e0
-payment-sg=sg-09c7bf5cd25b21aca
-robbitmq-sg=sg-0e305ab87769aea17
-shipping-sg=sg-083c984d59946dbf7
-user-sg=sg-047e6faff5e30b726
-mongodb-sg=sg-057ba51c678120834
+mysql-sg="sg-0f7150e0131efa770"
+redis-sg="sg-0432aa3e07739b38d"
+catalogue-sg="sg-06862356cb315985c"
+frontend-sg="sg-06a86884d2a9de796"
+dispatch-sg="sg-05f34277487186fad"
+cart-sg="sg-0122ed046e399c5e0"
+payment-sg="sg-09c7bf5cd25b21aca"
+robbitmq-sg="sg-0e305ab87769aea17"
+shipping-sg="sg-083c984d59946dbf7"
+user-sg="sg-047e6faff5e30b726"
+mongodb-sg="sg-057ba51c678120834"
 
 mysql_port="3306"
 redis_port="6379"
