@@ -37,7 +37,7 @@ validate_input() {
     elif [ $1 -eq 254 ]; then
         echo -e "${2}..${Y}Groupid not found OR port already exists... SKIPPED...${N}" | tee -a $logs_file    
     else
-        echo -e "${2}..${R}FAILED.${N}" | tee -a $logs_file
+        echo -e "${2}..${R}ERROR:${1} .. FAILED.${N}" | tee -a $logs_file
     fi
 } 
 
