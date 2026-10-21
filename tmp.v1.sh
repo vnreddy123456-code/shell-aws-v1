@@ -2,17 +2,17 @@
 # This is for creating new Security groups update with inbound rules in aws
 
 
-mysql-sg="sg-0f7150e0131efa770"
-redis-sg="sg-0432aa3e07739b38d"
-catalogue-sg="sg-06862356cb315985c"
-frontend-sg="sg-06a86884d2a9de796"
-dispatch-sg="sg-05f34277487186fad"
-cart-sg="sg-0122ed046e399c5e0"
-payment-sg="sg-09c7bf5cd25b21aca"
-robbitmq-sg="sg-0e305ab87769aea17"
-shipping-sg="sg-083c984d59946dbf7"
-user-sg="sg-047e6faff5e30b726"
-mongodb-sg="sg-057ba51c678120834"
+mysql_sg="sg-0f7150e0131efa770"
+redis_sg="sg-0432aa3e07739b38d"
+catalogue_sg="sg-06862356cb315985c"
+frontend_sg="sg-06a86884d2a9de796"
+dispatch_sg="sg-05f34277487186fad"
+cart_sg="sg-0122ed046e399c5e0"
+payment_sg="sg-09c7bf5cd25b21aca"
+rabbitmq_sg="sg-0e305ab87769aea17"
+shipping_sg="sg-083c984d59946dbf7"
+user_sg="sg-047e6faff5e30b726"
+mongodb_sg="sg-057ba51c678120834"
 
 mysql_port="3306"
 redis_port="6379"
@@ -28,131 +28,131 @@ validate() {
 
 #mogodb
     aws ec2 authorize-security-group-ingress \
-    --group-id ${mongodb-sg} \
+    --group-id ${mongodb_sg} \
     --protocol tcp \
     --port ${mongodb_port} \
-    --source-group ${catalogue-sg} ${user-sg} 
+    --source-group ${catalogue_sg} ${user_sg} 
     
 
     aws ec2 authorize-security-group-ingress \
-    --group-id ${mongodb-sg} \
+    --group-id ${mongodb_sg} \
     --protocol tcp \
     --port ${mongodb_port} \
-    --source-group ${user-sg}
+    --source-group ${user_sg}
     validate "Mongodb"
 
 #Redis
  aws ec2 authorize-security-group-ingress \
-    --group-id ${redis-sg} \
+    --group-id ${redis_sg} \
     --protocol tcp \
     --port ${redis_port} \
-    --source-group ${user-sg}
+    --source-group ${user_sg}
 
    aws ec2 authorize-security-group-ingress \
-    --group-id ${redis-sg} \
+    --group-id ${redis_sg} \
     --protocol tcp \
     --port ${redis_port} \
-    --source-group ${cart-sg}  
+    --source-group ${cart_sg}  
     validate "Redis"    
 
 #Mysql
  aws ec2 authorize-security-group-ingress \
-    --group-id ${mysql-sg} \
+    --group-id ${mysql_sg} \
     --protocol tcp \
     --port ${mysql_port} \
-    --source-group ${shipping-sg}
+    --source-group ${shipping_sg}
     validate "Mysql"
 
 #rabbitmq
     aws ec2 authorize-security-group-ingress \
-    --group-id ${rabbitmq-sg} \
+    --group-id ${rabbitmq_sg} \
     --protocol tcp \
     --port ${rabbitmq_port} \
-    --source-group ${payment-sg}
+    --source-group ${payment_sg}
 
     aws ec2 authorize-security-group-ingress \
-    --group-id ${rabbitmq-sg} \
+    --group-id ${rabbitmq_sg} \
     --protocol tcp \
     --port ${rabbitmq_port} \
-    --source-group ${dispatch-sg}
+    --source-group ${dispatch_sg}
 
      aws ec2 authorize-security-group-ingress \
-    --group-id ${rabbitmq-sg} \
+    --group-id ${rabbitmq_sg} \
     --protocol tcp \
     --port ${rabbitmq_ADMIN_port} \
-    --source-group ${user-sg}
+    --source-group ${user_sg}
 
 validate "RabbitMQ"
 #Catalogue
     aws ec2 authorize-security-group-ingress \
-    --group-id ${catalogue-sg} \
+    --group-id ${catalogue_sg} \
     --protocol tcp \
     --port ${service_port} \
-    --source-group ${frontend-sg}
+    --source-group ${frontend_sg}
 
     aws ec2 authorize-security-group-ingress \
-    --group-id ${catalogue-sg} \
+    --group-id ${catalogue_sg} \
     --protocol tcp \
     --port ${service_port} \
-    --source-group ${cart-sg}
+    --source-group ${cart_sg}
 
    validate "Catalogue"
 #User
     aws ec2 authorize-security-group-ingress \
-        --group-id ${user-sg} \
+        --group-id ${user_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${frontend-sg}
+        --source-group ${frontend_sg}
 
         aws ec2 authorize-security-group-ingress \
-        --group-id ${user-sg} \
+        --group-id ${user_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${user-sg}  
+        --source-group ${user_sg}  
 
         validate "User"  
 
 #Cart
     aws ec2 authorize-security-group-ingress \
-        --group-id ${cart-sg} \
+        --group-id ${cart_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${frontend-sg}
+        --source-group ${frontend_sg}
 
     aws ec2 authorize-security-group-ingress \
-        --group-id ${cart-sg} \
+        --group-id ${cart_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${shipping-sg}    
+        --source-group ${shipping_sg}    
 
      aws ec2 authorize-security-group-ingress \
-        --group-id ${cart-sg} \
+        --group-id ${cart_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${user-sg}    
+        --source-group ${user_sg}    
 
     validate "Cart"    
    
 #Shipping
    aws ec2 authorize-security-group-ingress \
-        --group-id ${shipping-sg} \
+        --group-id ${shipping_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${frontend-sg}   
+        --source-group ${frontend_sg}   
 
      validate "Shipping"   
 
 #Payment
    aws ec2 authorize-security-group-ingress \
-        --group-id ${payment-sg} \
+        --group-id ${payment_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${frontend-sg} 
+        --source-group ${frontend_sg} 
      validate "Payment"   
 
 #frontend
    aws ec2 authorize-security-group-ingress \
-        --group-id ${frontend-sg} \
+        --group-id ${frontend_sg} \
         --protocol tcp \
         --port ${server_http_port} \
         --cidr "0.0.0.0/0"  
