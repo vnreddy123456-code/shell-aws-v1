@@ -12,7 +12,7 @@ mkdir -p $logs_folder
 
 echo "Script started at $(date)" >> $logs_file
 shipping_sg="sg-05bc51050dcbeb09d"
-robbitmq_sg="sg-07b3d6cf2ec2795fe"
+rabbitmq_sg="sg-07b3d6cf2ec2795fe"
 mysql_sg="sg-07253ada680f235b1"
 catalogue_sg="sg-09d345b3c43bf57d3"
 payment_sg="sg-04cc2d77a056e5837"
@@ -77,12 +77,6 @@ validate_input() {
     validate_input $? "Mysql"
 
 #rabbitmq
-    aws ec2 authorize-security-group-ingress \
-    --group-id ${rabbitmq_sg} \
-    --protocol tcp \
-    --port ${rabbitmq_port} \
-    --source-group ${payment_sg}
-
     aws ec2 authorize-security-group-ingress \
     --group-id ${rabbitmq_sg} \
     --protocol tcp \
