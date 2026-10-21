@@ -1,7 +1,16 @@
 #!/bin/bash
 # This is for creating new Security groups update with inbound rules in aws
 
+logs_folder="/var/log/shell-practice"
+logs_file="${logs_folder}/${0}.log"
+R="\e[31m"
+G="\e[32m"
+N="\e[0m" # No Color
+Y="\e[33m"
 
+mkdir -p $logs_folder
+
+echo "Script started at $(date)" >> $logs_file
 mysql_sg="sg-0f7150e0131efa770"
 redis_sg="sg-0432aa3e07739b38d"
 catalogue_sg="sg-06862356cb315985c"
@@ -22,24 +31,28 @@ rabbitmq_ADMIN_port="15672"
 service_port="8080"
 server_http_port="80"
 
-validate() {
-   echo "${1} - Update Security group inbound rules ... SUCCESS"
-}  
+validate_input() {
+    if [$1 -ne 0]; then
+        echo -e "${2}..${R}FAILED.${N}" | tee -a $logs_file
+    else
+        echo -e "${2}..${G}SUCCESS${N}" | tee -a $logs_file
+    fi
+} 
 
 #mogodb
     aws ec2 authorize-security-group-ingress \
     --group-id ${mongodb_sg} \
     --protocol tcp \
     --port ${mongodb_port} \
-    --source-group ${catalogue_sg} ${user_sg} 
+    --source-group ${catalogue_sg} &>> $logs_file
     
 
     aws ec2 authorize-security-group-ingress \
     --group-id ${mongodb_sg} \
     --protocol tcp \
     --port ${mongodb_port} \
-    --source-group ${user_sg}
-    validate "Mongodb"
+    --source-group ${user_sg} &>> $logs_file
+    validate_input $? "Mongodb"
 
 #Redis
  aws ec2 authorize-security-group-ingress \
@@ -53,7 +66,7 @@ validate() {
     --protocol tcp \
     --port ${redis_port} \
     --source-group ${cart_sg}  
-    validate "Redis"    
+    validate_input $? "Redis"    
 
 #Mysql
  aws ec2 authorize-security-group-ingress \
@@ -61,7 +74,7 @@ validate() {
     --protocol tcp \
     --port ${mysql_port} \
     --source-group ${shipping_sg}
-    validate "Mysql"
+    validate_input $? "Mysql"
 
 #rabbitmq
     aws ec2 authorize-security-group-ingress \
@@ -82,7 +95,7 @@ validate() {
     --port ${rabbitmq_ADMIN_port} \
     --source-group ${user_sg}
 
-validate "RabbitMQ"
+validate_input $? "RabbitMQ"
 #Catalogue
     aws ec2 authorize-security-group-ingress \
     --group-id ${catalogue_sg} \
@@ -96,7 +109,7 @@ validate "RabbitMQ"
     --port ${service_port} \
     --source-group ${cart_sg}
 
-   validate "Catalogue"
+   validate_input $? "Catalogue"
 #User
     aws ec2 authorize-security-group-ingress \
         --group-id ${user_sg} \
@@ -110,7 +123,7 @@ validate "RabbitMQ"
         --port ${service_port} \
         --source-group ${user_sg}  
 
-        validate "User"  
+        validate_input $? "User"  
 
 #Cart
     aws ec2 authorize-security-group-ingress \
@@ -131,7 +144,7 @@ validate "RabbitMQ"
         --port ${service_port} \
         --source-group ${user_sg}    
 
-    validate "Cart"    
+    validate_input $? "Cart"    
    
 #Shipping
    aws ec2 authorize-security-group-ingress \
@@ -140,7 +153,7 @@ validate "RabbitMQ"
         --port ${service_port} \
         --source-group ${frontend_sg}   
 
-     validate "Shipping"   
+     validate_input $? "Shipping"   
 
 #Payment
    aws ec2 authorize-security-group-ingress \
@@ -148,7 +161,7 @@ validate "RabbitMQ"
         --protocol tcp \
         --port ${service_port} \
         --source-group ${frontend_sg} 
-     validate "Payment"   
+     validate_input $? "Payment"   
 
 #frontend
    aws ec2 authorize-security-group-ingress \
@@ -156,7 +169,7 @@ validate "RabbitMQ"
         --protocol tcp \
         --port ${server_http_port} \
         --cidr "0.0.0.0/0"  
-    validate "Frontend"       
+    validate_input $? "Frontend"       
 
 #Optional...... Dispatch ...............
 #    aws ec2 authorize-security-group-ingress \
@@ -164,4 +177,4 @@ validate "RabbitMQ"
 #        --protocol tcp \
 #        --port 22 \
 #        --source-group "sg-07305c208ea935c3c"  
-#    validate "Dispatch"                      
+#    validate_input $? "Dispatch"                      
