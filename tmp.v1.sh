@@ -32,7 +32,7 @@ service_port="8080"
 server_http_port="80"
 
 validate_input() {
-    if [$1 -ne 0]; then
+    if [ $1 -ne 0 ]; then
         echo -e "${2}..${R}FAILED.${N}" | tee -a $logs_file
     else
         echo -e "${2}..${G}SUCCESS${N}" | tee -a $logs_file
@@ -59,13 +59,13 @@ validate_input() {
     --group-id ${redis_sg} \
     --protocol tcp \
     --port ${redis_port} \
-    --source-group ${user_sg}
+    --source-group ${user_sg} &>> $logs_file
 
    aws ec2 authorize-security-group-ingress \
     --group-id ${redis_sg} \
     --protocol tcp \
     --port ${redis_port} \
-    --source-group ${cart_sg}  
+    --source-group ${cart_sg} &>> $logs_file  
     validate_input $? "Redis"    
 
 #Mysql
@@ -73,7 +73,7 @@ validate_input() {
     --group-id ${mysql_sg} \
     --protocol tcp \
     --port ${mysql_port} \
-    --source-group ${shipping_sg}
+    --source-group ${shipping_sg} &>> $logs_file
     validate_input $? "Mysql"
 
 #rabbitmq
@@ -81,19 +81,19 @@ validate_input() {
     --group-id ${rabbitmq_sg} \
     --protocol tcp \
     --port ${rabbitmq_port} \
-    --source-group ${payment_sg}
+    --source-group ${payment_sg} &>> $logs_file
 
     aws ec2 authorize-security-group-ingress \
     --group-id ${rabbitmq_sg} \
     --protocol tcp \
     --port ${rabbitmq_port} \
-    --source-group ${dispatch_sg}
+    --source-group ${dispatch_sg} &>> $logs_file
 
      aws ec2 authorize-security-group-ingress \
     --group-id ${rabbitmq_sg} \
     --protocol tcp \
     --port ${rabbitmq_ADMIN_port} \
-    --source-group "sg-07305c208ea935c3c"
+    --source-group "sg-07305c208ea935c3c" &>> $logs_file
 
 validate_input $? "RabbitMQ"
 #Catalogue
@@ -101,13 +101,13 @@ validate_input $? "RabbitMQ"
     --group-id ${catalogue_sg} \
     --protocol tcp \
     --port ${service_port} \
-    --source-group ${frontend_sg}
+    --source-group ${frontend_sg} &>> $logs_file
 
     aws ec2 authorize-security-group-ingress \
     --group-id ${catalogue_sg} \
     --protocol tcp \
     --port ${service_port} \
-    --source-group ${cart_sg}
+    --source-group ${cart_sg} &>> $logs_file
 
    validate_input $? "Catalogue"
 #User
@@ -115,13 +115,13 @@ validate_input $? "RabbitMQ"
         --group-id ${user_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${frontend_sg}
+        --source-group ${frontend_sg} &>> $logs_file
 
         aws ec2 authorize-security-group-ingress \
         --group-id ${user_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${user_sg}  
+        --source-group ${user_sg} &>> $logs_file  
 
         validate_input $? "User"  
 
@@ -130,19 +130,19 @@ validate_input $? "RabbitMQ"
         --group-id ${cart_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${frontend_sg}
+        --source-group ${frontend_sg} &>> $logs_file
 
     aws ec2 authorize-security-group-ingress \
         --group-id ${cart_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${shipping_sg}    
+        --source-group ${shipping_sg} &>> $logs_file    
 
      aws ec2 authorize-security-group-ingress \
         --group-id ${cart_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${user_sg}    
+        --source-group ${user_sg} &>> $logs_file    
 
     validate_input $? "Cart"    
    
@@ -151,7 +151,7 @@ validate_input $? "RabbitMQ"
         --group-id ${shipping_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${frontend_sg}   
+        --source-group ${frontend_sg} &>> $logs_file   
 
      validate_input $? "Shipping"   
 
@@ -160,7 +160,7 @@ validate_input $? "RabbitMQ"
         --group-id ${payment_sg} \
         --protocol tcp \
         --port ${service_port} \
-        --source-group ${frontend_sg} 
+        --source-group ${frontend_sg} &>> $logs_file 
      validate_input $? "Payment"   
 
 #frontend
@@ -168,7 +168,7 @@ validate_input $? "RabbitMQ"
         --group-id ${frontend_sg} \
         --protocol tcp \
         --port ${server_http_port} \
-        --cidr "0.0.0.0/0"  
+        --cidr "0.0.0.0/0" &>> $logs_file  
     validate_input $? "Frontend"       
 
 #Optional...... Dispatch ...............
@@ -176,5 +176,5 @@ validate_input $? "RabbitMQ"
         --group-id "${dispatch-sg}" \
         --protocol tcp \
         --port 22 \
-        --source-group "sg-07305c208ea935c3c"  
+        --source-group "sg-07305c208ea935c3c" &>> $logs_file  
     validate_input $? "Dispatch"                      
