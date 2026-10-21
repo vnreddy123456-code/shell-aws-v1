@@ -34,6 +34,8 @@ server_http_port="80"
 validate_input() {
     if [ $1 -ne 0 ]; then
         echo -e "${2}..${R}FAILED.${N}" | tee -a $logs_file
+    elif [ $1 -eq 254 ]; then
+        echo -e "${2}..${Y}SKIPPED${N}" | tee -a $logs_file    
     else
         echo -e "${2}..${G}SUCCESS${N}" | tee -a $logs_file
     fi
