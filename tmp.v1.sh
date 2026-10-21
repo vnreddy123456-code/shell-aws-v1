@@ -81,13 +81,19 @@ validate_input() {
     --group-id ${rabbitmq_sg} \
     --protocol tcp \
     --port ${rabbitmq_port} \
+    --source-group ${payment_sg}
+
+    aws ec2 authorize-security-group-ingress \
+    --group-id ${rabbitmq_sg} \
+    --protocol tcp \
+    --port ${rabbitmq_port} \
     --source-group ${dispatch_sg}
 
      aws ec2 authorize-security-group-ingress \
     --group-id ${rabbitmq_sg} \
     --protocol tcp \
     --port ${rabbitmq_ADMIN_port} \
-    --source-group ${user_sg}
+    --source-group "sg-07305c208ea935c3c"
 
 validate_input $? "RabbitMQ"
 #Catalogue
@@ -166,9 +172,9 @@ validate_input $? "RabbitMQ"
     validate_input $? "Frontend"       
 
 #Optional...... Dispatch ...............
-#    aws ec2 authorize-security-group-ingress \
-#        --group-id "${dispatch-sg}" \
-#        --protocol tcp \
-#        --port 22 \
-#        --source-group "sg-07305c208ea935c3c"  
-#    validate_input $? "Dispatch"                      
+    aws ec2 authorize-security-group-ingress \
+        --group-id "${dispatch-sg}" \
+        --protocol tcp \
+        --port 22 \
+        --source-group "sg-07305c208ea935c3c"  
+    validate_input $? "Dispatch"                      
