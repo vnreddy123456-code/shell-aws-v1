@@ -1,6 +1,5 @@
 #!/bin/bash
-
-#ami_id="ami-0220d79f3f480ecf5"
+# This is for creating new ec2 instances  in aws
 ami_id="ami-0055977a6e828a4f4"
 instance_type="t3.micro"
 domain_name="yanvisol.online"
@@ -13,7 +12,7 @@ do
     instance_id=$(aws ec2 run-instances \
             --image-id $ami_id \
             --instance-type $instance_type \
-            --security-groups "roboshop-common" "roboshop-$instance" \
+            --security-groups "My-IP" "roboshop-$instance" \
             --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=roboshop-$instance}]" \
             --query 'Instances[0].InstanceId' \
             --output text
