@@ -12,7 +12,7 @@ mkdir -p $logs_folder
 
 echo "Script started at $(date)" >> $logs_file
 shipping_sg="sg-05bc51050dcbeb09d"
-rabbitmq_sg="sg-07b3d6cf2ec2795fe"
+rabbitmq_sg="sg-0b3393785cfb2e60d"
 mysql_sg="sg-07253ada680f235b1"
 catalogue_sg="sg-09d345b3c43bf57d3"
 payment_sg="sg-04cc2d77a056e5837"
