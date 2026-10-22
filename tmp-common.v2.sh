@@ -59,10 +59,13 @@ validate_input() {
 
 add_update_sg() {
 
+        gid='${1}_sg'
+        port="${1}_port"
+
         aws ec2 authorize-security-group-ingress \
-        --group-id ${"${1}_sg"} \
+        --group-id $gid \
         --protocol tcp \
-        --port ${"${1}_port"} \
+        --port $port \
         --source-group ${2} &>> $logs_file
         validate_input $? "${1}. port: ${2} and SG:${1} added."
 }
@@ -81,10 +84,12 @@ frontend_update_sg() {
 
 #common SG update
 common_update_sg() {
+    gid='${1}_sg'
+    port="${2}_port"
     aws ec2 authorize-security-group-ingress \
-    --group-id ${"${1}_sg"} \
+    --group-id $gid \
     --protocol tcp \
-    --port ${"${2}_port"} \
+    --port $port \
     --source-group ${common_sg} &>> $logs_file
     validate_input $? "${1}"
 
