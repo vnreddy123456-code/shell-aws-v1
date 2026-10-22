@@ -1,26 +1,6 @@
 #!/bin/bash
 # This is for creating new SG in aws
-logs_folder="/var/log/shell-practice"
-logs_file="${logs_folder}/${0}.log"
-R="\e[31m"
-G="\e[32m"
-N="\e[0m" # No Color
-Y="\e[33m"
-vpc_id="vpc-05a34748a198812f0"
-group_name="roboshop"
-
-mkdir -p $logs_folder
-
-echo "Script started at $(date)" >> $logs_file
-echo "SG Creation Start"
-
-validate_input() {
-    if [$1 -ne 0]; then
-        echo -e "${2}..${R}FAILED.${N}" | tee -a $logs_file
-    else
-        echo -e "${2}..${G}SUCCESS${N}" | tee -a $logs_file
-    fi
-}
+source ./tmp-common.v2.sh
 
 for package in $@
 do
