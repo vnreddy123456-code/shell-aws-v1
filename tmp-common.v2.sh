@@ -61,13 +61,13 @@ add_update_sg() {
 
         gid="${1}_sg"
         port="${1}_port"
-        echo "SG Update Start ${1} port: ${port} and SG:${gid}"
+        echo "SG Update Start ${1} port: ${${port}} and SG:${${gid}}"
         aws ec2 authorize-security-group-ingress \
-        --group-id "${gid}" \
+        --group-id ${${gid}} \
         --protocol tcp \
-        --port "${port}" \
+        --port ${${port}} \
         --source-group ${2} &>> $logs_file
-        validate_input $? "${1}. port: ${2} and SG:${1} added."
+        validate_input $? "${1}. port: ${${port}} and SG:${${gid}} added."
 }
 
 
