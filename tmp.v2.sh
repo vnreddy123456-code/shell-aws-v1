@@ -26,7 +26,7 @@ check_root_user
     add_update_sg "catalogue" ${cart_sg} 
     add_update_sg "catalogue" ${frontend_sg}
 #User
-    add_update_sg "user" ${user_sg} 
+    add_update_sg "user" ${payment_sg} 
     add_update_sg "user" ${frontend_sg}
 #Cart
     add_update_sg "cart" ${shipping_sg} 
