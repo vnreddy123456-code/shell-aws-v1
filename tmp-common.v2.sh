@@ -58,15 +58,19 @@ validate_input() {
 
 
 add_update_sg() {
-
-        gid="${1}_sg"
-        port="${1}_port"
-        echo "SG Update Start ${1} port: ${!port} and SG:${!gid}"
+        # Scope variables locally to protect global script execution
+        local gid="${1}_sg"
+        local port="${1}_port"
+        
+       # echo "SG Update Start ${1} port: ${!port} and SG:${!gid}"
+        
+        # Wrapped variables in double-quotes to prevent word-splitting
         aws ec2 authorize-security-group-ingress \
-        --group-id ${!gid} \
-        --protocol tcp \
-        --port ${!port} \
-        --source-group ${2} &>> $logs_file
+            --group-id "${!gid}" \
+            --protocol tcp \
+            --port "${!port}" \
+            --source-group "${2}" &>> "$logs_file"
+            
         validate_input $? "${1}. port: ${!port} and SG:${!gid} added."
 }
 
@@ -84,12 +88,12 @@ frontend_update_sg() {
 
 #common SG update
 common_update_sg() {
-    gid='${1}_sg'
-    port="${2}_port"
+    local gid="${1}_sg"
+    local port="${2}_port"
     aws ec2 authorize-security-group-ingress \
-    --group-id ${gid} \
+    --group-id "${!gid}" \
     --protocol tcp \
-    --port ${port} \
+    --port "${!port}" \
     --source-group ${common_sg} &>> $logs_file
     validate_input $? "${1}"
 
