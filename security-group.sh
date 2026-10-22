@@ -2,6 +2,8 @@
 # This is for creating new SG in aws
 source ./tmp-common.v2.sh
 
+check_root_user
+
 for package in $@
 do
     echo "SG Creation Start $group_name"
