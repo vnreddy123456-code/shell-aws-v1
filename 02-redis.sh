@@ -7,8 +7,7 @@ R="\e[31m"
 G="\e[32m"
 N="\e[0m" # No Color
 Y="\e[33m"
-vpc_id="vpc-05a34748a198812f0"
-group_name="roboshop"
+ 
 
 if [ $user_id -ne 0 ]; then
     echo -e "${R}Please run the script as root user${N}"
