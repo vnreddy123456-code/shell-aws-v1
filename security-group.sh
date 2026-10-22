@@ -2,6 +2,8 @@
 # This is for creating new SG in aws
 source ./tmp-common.v2.sh
 
+pc_id="vpc-05a34748a198812f0"
+group_name="roboshop"
 check_root_user
 
 for package in $@
